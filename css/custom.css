@@ -1,0 +1,6 @@
+/* Your custom css code goes here */
+
+.image_max_size {
+    height: 160px;
+    overflow: hidden;
+}

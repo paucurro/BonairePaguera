@@ -1,0 +1,31 @@
+{
+  "name": "covima-sftp-switcher",
+  "displayName": "SFTP Switcher by Polinetic",
+  "description": "Botones DEV y PROD en la barra de estado para cambiar .vscode/sftp.json.",
+  "version": "1.0.0",
+  "publisher": "covima",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:covimaSftp.switchDev",
+    "onCommand:covimaSftp.switchProd"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "covimaSftp.switchDev",
+        "title": "SFTP Switcher by Polinetic: DEV"
+      },
+      {
+        "command": "covimaSftp.switchProd",
+        "title": "SFTP Switcher by Polinetic: PROD"
+      }
+    ]
+  }
+}
