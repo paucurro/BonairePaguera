@@ -14,7 +14,7 @@ carga_idiomas($_SESSION['datos_usuario']->idioma);
 $salir = true;
 if (isset($_REQUEST['id'])) {
 
-    $id = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_SPECIAL_CHARS);
+    $id = (int)($_GET["id"] ?? 0);
 
     mysqli_select_db($bonaire_atalaya_db, $database_bonaire_atalaya_db);
     $query_tabla = "SELECT *, DATE_FORMAT(created_at, '%d/%m/%Y') AS fecha, category.name AS category FROM post " .
@@ -24,7 +24,7 @@ if (isset($_REQUEST['id'])) {
     if ($tabla != false) {
         $row_blog = mysqli_fetch_array($tabla, MYSQLI_ASSOC);
         mysqli_free_result($tabla);
-        $salir = false;
+        $salir = ($row_blog === null);
     }
 }
 
@@ -61,7 +61,7 @@ if ($salir == true) {
                     <div class="panel-body">
                         <h4><?php echo pon_campo_idioma($row_blog, 'brief'); ?></h4>
                         <p class="text-center"><img src="img/curve.svg" class="seperator probootstrap-animate" alt=""></p>
-                        <p><?php echo pon_campo_idioma($row_blog, 'content'); ?></p>
+                        <div class="blog-content"><?php echo pon_campo_idioma($row_blog, 'content'); ?></div>
                         <p class="text-center"><img src="img/curve.svg" class="seperator probootstrap-animate" alt=""></p>
                         <small><?php echo $row_blog['fecha']; ?></small>
                         <small><?php echo $row_blog['category']; ?></small>

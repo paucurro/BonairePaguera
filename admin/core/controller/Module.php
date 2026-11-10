@@ -5,6 +5,7 @@
 // Module.php
 // @brief tareas que se realizan con modulos.
 
+#[AllowDynamicProperties]
 class Module
 {
 

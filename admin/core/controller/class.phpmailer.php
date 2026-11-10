@@ -25,6 +25,7 @@
  * @author Andy Prevost (codeworxtech) <codeworxtech@users.sourceforge.net>
  * @author Brent R. Matzelle (original founder)
  */
+#[AllowDynamicProperties]
 class PHPMailer
 {
     /**
@@ -3872,6 +3873,7 @@ class PHPMailer
  * PHPMailer exception handler
  * @package PHPMailer
  */
+#[AllowDynamicProperties]
 class phpmailerException extends Exception
 {
     /**

@@ -1,5 +1,6 @@
 <?php
 
+#[AllowDynamicProperties]
 class CommentData
 {
     public static $tablename = "comment";

@@ -6,6 +6,7 @@
  * y tambien los setters y getters correspondientes.
  **/
 
+#[AllowDynamicProperties]
 class Session
 {
     public static function setUID($uid)

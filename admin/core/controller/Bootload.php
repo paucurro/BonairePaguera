@@ -5,6 +5,7 @@
 // Bootload.php
 // @brief esta clase sirve para alistar los boot
 
+#[AllowDynamicProperties]
 class Bootload
 {
     /**

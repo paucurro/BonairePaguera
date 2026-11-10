@@ -5,6 +5,7 @@
 // Core.php
 // @brief obtiene las configuraciones, muestra y carga los contenidos necesarios.
 // actualizado [11-Aug-2016]
+#[AllowDynamicProperties]
 class Core
 {
     public static $theme = "";

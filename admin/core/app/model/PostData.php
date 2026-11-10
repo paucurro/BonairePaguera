@@ -1,5 +1,6 @@
 <?php
 
+#[AllowDynamicProperties]
 class PostData
 {
     public static $tablename = "post";
@@ -24,22 +25,27 @@ class PostData
         $this->created_at = "NOW()";
     }
 
+    private static function esc($v)
+    {
+        return Database::getCon()->real_escape_string((string)$v);
+    }
+
     public function add()
     {
         $sql = "insert into " . self::$tablename . " (title,title_es,title_de,brief,brief_es,brief_de,content,content_es,content_de,category_id,destination,image,created_at) ";
         $sql .= 'value ("'
-            . $this->title
-            . '","' . $this->title_es
-            . '","' . $this->title_de
-            . '","' . $this->brief
-            . '","' . $this->brief_es
-            . '","' . $this->brief_de
-            . '","' . $this->content
-            . '","' . $this->content_es
-            . '","' . $this->content_de
-            . '",' . $this->category_id
-            . ',' . $this->destination
-            . ',"' . $this->image . '",NOW())';
+            . self::esc($this->title)
+            . '","' . self::esc($this->title_es)
+            . '","' . self::esc($this->title_de)
+            . '","' . self::esc($this->brief)
+            . '","' . self::esc($this->brief_es)
+            . '","' . self::esc($this->brief_de)
+            . '","' . self::esc($this->content)
+            . '","' . self::esc($this->content_es)
+            . '","' . self::esc($this->content_de)
+            . '",' . (int)$this->category_id
+            . ',' . (int)$this->destination
+            . ',"' . self::esc($this->image) . '",NOW())';
         return Executor::doit($sql);
     }
 
@@ -59,20 +65,20 @@ class PostData
     public function update()
     {
         $sql = "update " . self::$tablename . " set " .
-            "title=\"$this->title\"," .
-            "title_es=\"$this->title_es\"," .
-            "title_de=\"$this->title_de\"," .
-            "brief=\"$this->brief\"," .
-            "brief_es=\"$this->brief_es\"," .
-            "brief_de=\"$this->brief_de\"," .
-            "content=\"$this->content\"," .
-            "content_es=\"$this->content_es\"," .
-            "content_de=\"$this->content_de\"," .
-            "image=\"$this->image\"," .
-            "category_id=\"$this->category_id\"," .
+            "title=\"" . self::esc($this->title) . "\"," .
+            "title_es=\"" . self::esc($this->title_es) . "\"," .
+            "title_de=\"" . self::esc($this->title_de) . "\"," .
+            "brief=\"" . self::esc($this->brief) . "\"," .
+            "brief_es=\"" . self::esc($this->brief_es) . "\"," .
+            "brief_de=\"" . self::esc($this->brief_de) . "\"," .
+            "content=\"" . self::esc($this->content) . "\"," .
+            "content_es=\"" . self::esc($this->content_es) . "\"," .
+            "content_de=\"" . self::esc($this->content_de) . "\"," .
+            "image=\"" . self::esc($this->image) . "\"," .
+            "category_id=" . (int)$this->category_id . "," .
             "status=$this->status," .
-            "destination=\"$this->destination\" " .
-            "where id=$this->id";
+            "destination=" . (int)$this->destination . " " .
+            "where id=" . (int)$this->id;
         return Executor::doit($sql);
     }
 

@@ -1,5 +1,6 @@
 <?php
 
+#[AllowDynamicProperties]
 class lbForm
 {
     public function __construct()

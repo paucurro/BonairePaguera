@@ -9,6 +9,7 @@
 // entonces cuando este usuario visite el perfil de otro, solo se apuntara en visitas 1vez cada 24horas.
 // la infomacion de usuarios registrados no se eliminara.
 
+#[AllowDynamicProperties]
 class IpLogger
 {
 

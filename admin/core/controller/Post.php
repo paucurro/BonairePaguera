@@ -5,6 +5,7 @@
 // Post.php
 // @brief esto es algo mucho mas magico
 
+#[AllowDynamicProperties]
 class Post
 {
     function __get($value)

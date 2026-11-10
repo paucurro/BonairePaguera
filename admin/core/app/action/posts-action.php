@@ -20,6 +20,24 @@ function sube_imagen($FILES)
     return $image;
 }
 
+
+// Limpia el HTML del editor enriquecido: solo etiquetas de formato, sin scripts ni eventos
+function limpia_html($html)
+{
+    $permitidas = '<p><br><b><strong><i><em><u><s><strike><span><div><h1><h2><h3><h4><h5><h6><ul><ol><li><a><blockquote><table><thead><tbody><tr><th><td><hr><sub><sup>';
+    $html = preg_replace('#<(script|style|iframe|object|embed)\b.*?</\1>#is', '', $html);
+    $html = strip_tags($html, $permitidas);
+    $html = preg_replace('#\son\w+\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)#i', '', $html);
+    $html = preg_replace('#(href|src)\s*=\s*("|\')\s*javascript:[^"\']*\2#i', '$1="#"', $html);
+    return trim($html);
+}
+
+foreach (['brief', 'brief_es', 'brief_de', 'content', 'content_es', 'content_de'] as $campo_rico) {
+    if (isset($_POST[$campo_rico])) {
+        $_POST[$campo_rico] = limpia_html($_POST[$campo_rico]);
+    }
+}
+
 if (isset($_GET["opt"]) && $_GET["opt"] == "add") {
     $user = new PostData();
     $user->title = $_POST["title"];

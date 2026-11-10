@@ -1,5 +1,6 @@
 <?php
 
+#[AllowDynamicProperties]
 class lbInputText
 {
     public function __construct($config)

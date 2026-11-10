@@ -5,6 +5,7 @@
 // Request.php
 // @brief esto es algo mucho mas magico
 
+#[AllowDynamicProperties]
 class Request
 {
     function __get($value)

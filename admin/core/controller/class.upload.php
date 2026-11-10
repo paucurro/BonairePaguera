@@ -33,6 +33,7 @@
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @copyright Colin Verot
  */
+#[AllowDynamicProperties]
 class upload
 {
 
@@ -2670,7 +2671,7 @@ class upload
      */
     function getsize($size)
     {
-        $last = strtolower($size{strlen($size) - 1});
+        $last = strtolower($size[strlen($size) - 1]);
         $size = intval($size);
         switch ($last) {
             case 'g':

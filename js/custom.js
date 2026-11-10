@@ -41,7 +41,7 @@ jQuery(document).ready(function () {
                             }
                             html +=
                                 '        <h4 class="mt0"><a href="' + link_url + '" class="hover-reverse">' + pon_campo_idioma(row, 'title') + '</a></h4>\n' +
-                                '        <p class="text-mute">' + pon_campo_idioma(row, 'brief') + '</p>\n' +
+                                '        <div class="text-mute">' + pon_campo_idioma(row, 'brief') + '</div>\n' +
                                 '        <p class="text-mute">' + row['fecha'] + ' • ' + row['category'] + '</p>\n' +
                                 '    </div>\n' +
                                 '</div>';

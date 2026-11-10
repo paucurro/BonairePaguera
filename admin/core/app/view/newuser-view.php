@@ -24,7 +24,7 @@
             </h1>
             <br>
             <form class="form-horizontal" method="post" id="addproduct" action="index.php?view=adduser" role="form">
-                <input type="hidden" name="kind" value="<?php echo $_GET["kind"]; ?>">
+                <input type="hidden" name="kind" value="<?php echo htmlspecialchars($_GET["kind"] ?? ""); ?>">
 
                 <div class="form-group">
                     <label for="inputEmail1" class="col-lg-2 control-label">Nombre*</label>

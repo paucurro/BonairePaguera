@@ -1,5 +1,6 @@
 <?php
 
+#[AllowDynamicProperties]
 class Database
 {
     public static $db;
@@ -15,6 +16,7 @@ class Database
 
     function connect()
     {
+        mysqli_report(MYSQLI_REPORT_OFF); // PHP 8.1+ lanza excepciones por defecto
         $con = new mysqli($this->host, $this->user, $this->pass, $this->ddbb);
         $con->set_charset('utf8');
         return $con;

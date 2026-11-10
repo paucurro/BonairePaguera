@@ -5,6 +5,7 @@
 // Cookie.php
 // @brief esto es algo mucho mas magico
 
+#[AllowDynamicProperties]
 class Cookie
 {
     function __get($value)
