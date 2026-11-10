@@ -118,6 +118,7 @@ return [
         '001' => 'Nuestro Blog',
         '002' => 'Información, ofertas, noticias, avisos y más.<br><strong>Todo lo que necesita</strong> para su visita a nuestros apartamentos',
         '003' => 'Volver a blog',
+        '004' => 'Cargar más',
     ],
     'txt_contact' => [
         '001' => 'Contacte con nosotros',

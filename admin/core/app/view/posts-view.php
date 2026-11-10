@@ -66,13 +66,25 @@
                                         <div class="form-group">
                                             <label for="image_new" class="col-lg-2 control-label">Imagen para subir (1920x1080)</label>
                                             <div class="col-lg-6">
-                                                <input type="file" name="image_new" id="image_new">
+                                                <input type="file" name="image_new" id="image_new" accept="image/jpeg,image/png,image/webp,image/gif">
                                             </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="image" class="col-lg-2 control-label">Imagen actual</label>
                                             <div class="col-lg-6">
                                                 <input type="text" class="form-control" id="image" name="image" value=""/>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="publish_at" class="col-lg-2 control-label">Activar el</label>
+                                            <div class="col-lg-4">
+                                                <input type="datetime-local" class="form-control" id="publish_at" name="publish_at">
+                                                <span class="help-block">Vacío = visible desde que se guarda.</span>
+                                            </div>
+                                            <label for="expires_at" class="col-lg-2 control-label">Caduca el</label>
+                                            <div class="col-lg-4">
+                                                <input type="datetime-local" class="form-control" id="expires_at" name="expires_at">
+                                                <span class="help-block">Vacío = no caduca.</span>
                                             </div>
                                         </div>
                                     </div>
@@ -171,6 +183,7 @@
                             <th>Categoria</th>
                             <th>foto</th>
                             <th>Activo</th>
+                            <th>Publicación</th>
                             <th>Destino</th>
                             <th>Creacion</th>
                             <th></th>
@@ -185,17 +198,32 @@
                                             "<i class='flag-icon flag flag-icon-background flag-icon-de'></i> " . $user->title_de; ?></td>
                                     <td><?php echo CategoryData::getById($user->category_id)->name; ?></td>
                                     <td><?php if ($user->image != '') {
-                                            echo "<a href='../uploads/" . $user->image . "' target='_blank' ><i class='fa fa-image'></i></a>";
+                                            $src = "../uploads/" . rawurlencode($user->image);
+                                            echo "<a href='" . $src . "' target='_blank'><img src='" . $src . "' alt='' loading='lazy' style='width:80px;height:50px;object-fit:cover;border-radius:4px;display:block;'></a>";
                                         } ?></td>
                                     <td><?php if ($user->status == 1) {
                                             echo "<i class='fa fa-check'></i>";
                                         } ?></td>
+                                    <td><?php
+                                        $ahora = date('Y-m-d H:i:s');
+                                        if ($user->status != 1) {
+                                            echo "<span class='label label-default'>Desactivado</span>";
+                                        } elseif (!empty($user->publish_at) && $user->publish_at > $ahora) {
+                                            echo "<span class='label label-warning'>Programado</span>";
+                                        } elseif (!empty($user->expires_at) && $user->expires_at <= $ahora) {
+                                            echo "<span class='label label-danger'>Caducado</span>";
+                                        } else {
+                                            echo "<span class='label label-success'>Publicado</span>";
+                                        }
+                                        if (!empty($user->publish_at)) { echo "<br><small>Desde: " . date('d/m/Y H:i', strtotime($user->publish_at)) . "</small>"; }
+                                        if (!empty($user->expires_at)) { echo "<br><small>Hasta: " . date('d/m/Y H:i', strtotime($user->expires_at)) . "</small>"; }
+                                    ?></td>
                                     <td><?php echo ($user->destination == 0) ? 'Ambas webs' : (($user->destination == 1) ? 'Atalaya Bosque' : 'Bonaire Paguera'); ?></td>
                                     <td><?php echo $user->created_at; ?></td>
                                     <td style="width:130px;">
                                         <div class="btn-group">
                                             <button type="button" class="btn btn-warning btn-xs btn_edit" data-toggle="modal" data-id="<?php echo $user->id; ?>"> Editar</button>
-                                            <a href="index.php?action=posts&opt=del&id=<?php echo $user->id; ?>" class="btn btn-danger btn-xs" style="margin-left: 6px;">Eliminar</a>
+                                            <a href="index.php?action=posts&opt=del&id=<?php echo $user->id; ?>" class="btn btn-danger btn-xs" style="margin-left: 6px;" data-confirm-del="1">Eliminar</a>
                                         </div>
                                     </td>
                                 </tr>
@@ -431,6 +459,33 @@
             }).catch(function (e) {
                 estado.text('No se pudo traducir: ' + e.message);
             }).then(function () { btn.prop('disabled', false); });
+        });
+    });
+</script>
+
+<div class="modal fade" id="modalBorrar" tabindex="-1" role="dialog" aria-labelledby="modalBorrarLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-red">
+                <h4 class="modal-title" id="modalBorrarLabel"><i class="fa fa-warning"></i> Eliminar artículo</h4>
+            </div>
+            <div class="modal-body">
+                <p>¿Seguro que quieres eliminar este artículo?</p>
+                <p><strong>Esta acción NO se puede deshacer.</strong> El artículo no se podrá recuperar.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">No borrar</button>
+                <a href="#" id="btnConfirmarBorrar" class="btn btn-danger">Sí, borrar</a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(function () {
+        $(document).on('click', 'a[data-confirm-del]', function (e) {
+            e.preventDefault();
+            $('#btnConfirmarBorrar').attr('href', $(this).attr('href'));
+            $('#modalBorrar').modal('show');
         });
     });
 </script>

@@ -274,6 +274,8 @@
                         if (elemento.length > 0) {
                             if (elemento.attr('type') == 'checkbox') {
                                 elemento.prop('checked', (valor == '1'));
+                            } else if (elemento.attr('type') == 'datetime-local') {
+                                elemento.val(valor ? String(valor).replace(' ', 'T').substring(0, 16) : '');
                             } else {
                                 elemento.val(valor);
                             }

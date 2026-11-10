@@ -97,4 +97,6 @@
 <script src="js/scripts.min.js"></script>
 <script src="js/main.min.js"></script>
 <script src="js/vendor/jquery.magnific-popup.min.js"></script>
+<script src="js/vendor/masonry.pkgd.min.js"></script>
+<script src="js/vendor/imagesloaded.pkgd.min.js"></script>
 <script src="js/custom.js"></script>

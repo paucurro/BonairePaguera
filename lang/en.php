@@ -98,6 +98,7 @@ return [
         '001' => 'Our Blog',
         '002' => 'Information, offers, news, announcements, and more.<br><strong>Everything you need</strong> for your visit to our apartments',
         '003' => 'Go back Blog',
+        '004' => 'Load more',
     ],
     'txt_contact' => [
         '001' => 'Contact with Us',

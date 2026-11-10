@@ -44,6 +44,9 @@ carga_idiomas($_SESSION['datos_usuario']->idioma);
 <section class="probootstrap-section">
     <div class="container">
         <div class="row" id="zona_blog"><i class="fa fa-spin fa-spinner"></i></div>
+        <div class="text-center" id="zona_blog_mas" style="display:none; margin-top: 20px;">
+            <button type="button" id="btn_blog_mas" class="btn btn-primary btn-lg"><?php echo trans('txt_blog.004'); ?></button>
+        </div>
     </div>
 </section>
 

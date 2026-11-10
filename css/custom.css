@@ -4,3 +4,24 @@
     height: 160px;
     overflow: hidden;
 }
+
+/* Blog: 3 columnas masonry (Masonry.js, orden por filas de izquierda a derecha) */
+.blog-masonry { margin: 0 -10px; }
+.blog-masonry::after { content: ""; display: block; clear: both; }
+.blog-masonry-item {
+    width: 33.333%;
+    float: left;
+    padding: 0 10px;
+    margin-bottom: 20px;
+}
+.blog-masonry-img img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+@media (max-width: 991px) {
+    .blog-masonry-item { width: 50%; }
+}
+@media (max-width: 575px) {
+    .blog-masonry-item { width: 100%; }
+}

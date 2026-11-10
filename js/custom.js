@@ -16,52 +16,72 @@ jQuery(document).ready(function () {
     $('.img_zoom').magnificPopup({type: 'image'});
 
     if ($('#zona_blog').length > 0) {
-        $.ajax({
-            type: "POST",
-            dataType: "JSON",
-            url: "BlogGet.php",
-            data: '',
-            success: function (data) {
+        var $zona = $('#zona_blog'), $grid = null, msnry = null;
+        var $btnMas = $('#btn_blog_mas'), $wrapMas = $('#zona_blog_mas');
 
-                if (data['resp'] == 'OK') {
-                    var html = '';
-                    if (data['data'].length > 0) {
-                        var link_url, contador = 0;
+        function html_tarjeta(row) {
+            var link_url = 'blog_det.php?id=' + row['id'];
+            var html =
+                '<div class="blog-masonry-item">\n' +
+                '    <div class="probootstrap-hentry" style="border: 1px solid #efefef; padding: 10px;">\n';
+            if ((row['image'] != null) && (row['image'] != '')) {
+                html +=
+                    '<div class="blog-masonry-img">\n' +
+                    '   <a href="' + link_url + '"><img src="/uploads/' + row['image'] + '" alt="" class="img-responsive"></a>\n' +
+                    '</div>\n';
+            }
+            html +=
+                '        <h4 class="mt0"><a href="' + link_url + '" class="hover-reverse">' + pon_campo_idioma(row, 'title') + '</a></h4>\n' +
+                '        <div class="text-mute">' + pon_campo_idioma(row, 'brief') + '</div>\n' +
+                '        <p class="text-mute">' + row['fecha'] + ' • ' + row['category'] + '</p>\n' +
+                '    </div>\n' +
+                '</div>';
+            return html;
+        }
 
-                        $.each(data['data'], function (ind, row) {
-                            link_url = 'blog_det.php?id=' + row['id'];
-                            html +=
-                                '<div class="col-md-4 col-sm-6 col-xs-12">\n' +
-                                '    <div class="probootstrap-hentry mb30"  style="border: 1px solid #efefef; padding: 10px;">\n';
-                            if ((row['image'] != null) && (row['image'] != '')) {
-                                html +=
-                                    '<div class="image_max_size">\n' +
-                                    '   <a href="' + link_url + '"><img src="/uploads/' + row['image'] + '" alt="" class="img-responsive"></a>\n' +
-                                    '</div>\n';
-                            }
-                            html +=
-                                '        <h4 class="mt0"><a href="' + link_url + '" class="hover-reverse">' + pon_campo_idioma(row, 'title') + '</a></h4>\n' +
-                                '        <div class="text-mute">' + pon_campo_idioma(row, 'brief') + '</div>\n' +
-                                '        <p class="text-mute">' + row['fecha'] + ' • ' + row['category'] + '</p>\n' +
-                                '    </div>\n' +
-                                '</div>';
+        function carga_noticias(offset) {
+            $btnMas.prop('disabled', true);
+            $.ajax({
+                type: "POST",
+                dataType: "JSON",
+                url: "BlogGet.php",
+                data: {offset: offset},
+                success: function (data) {
+                    if (data['resp'] != 'OK') {
+                        $zona.html('Error cargando noticias. ' + data['data']);
+                        return;
+                    }
+                    var $items = $(data['data'].map(html_tarjeta).join(''));
 
-                            contador++;
-                            if (contador >= 3) {
-                                contador = 0;
-                                html += '<div class="clearfix visible-lg-block visible-md-block"></div>\n';
-                            }
-                        });
+                    if ($grid === null) {
+                        $zona.empty();
+                        $grid = $('<div class="blog-masonry"></div>').appendTo($zona);
+                        $grid.append($items);
+                        if (typeof Masonry !== 'undefined' && typeof imagesLoaded !== 'undefined') {
+                            msnry = new Masonry($grid[0], {itemSelector: '.blog-masonry-item', percentPosition: true, transitionDuration: 0});
+                            imagesLoaded($grid[0]).on('progress', function () { msnry.layout(); });
+                        }
+                    } else {
+                        $grid.append($items);
+                        if (msnry) {
+                            msnry.appended($items.get());
+                            imagesLoaded($grid[0]).on('progress', function () { msnry.layout(); });
+                        }
                     }
 
-                    $('#zona_blog').html(html);
-
-                } else {
-                    $('#zona_blog').html('Error cargando noticias. ' + data['data'])
+                    $btnMas.data('offset', data['next_offset']).prop('disabled', false);
+                    $wrapMas.toggle(!!data['has_more']);
+                },
+                error: function () {
+                    $zona.html('Error cargando noticias.');
                 }
-            }
-        });
+            });
+        }
 
+        $btnMas.on('click', function () {
+            carga_noticias($btnMas.data('offset') || 0);
+        });
+        carga_noticias(0);
     }
 
 });

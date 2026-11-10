@@ -65,6 +65,8 @@ CREATE TABLE `post` (
   `status` int(11) DEFAULT '1',
   `category_id` int(11) NOT NULL,
   `destination` smallint(1) DEFAULT '0' COMMENT '0=ambos, 1=atalaya, 2=bonaire',
+  `publish_at` datetime DEFAULT NULL COMMENT 'Fecha de activacion (NULL=inmediata)',
+  `expires_at` datetime DEFAULT NULL COMMENT 'Fecha de caducidad (NULL=nunca)',
   PRIMARY KEY (`id`),
   KEY `category_id` (`category_id`),
   CONSTRAINT `post_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `category` (`id`)

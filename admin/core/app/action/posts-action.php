@@ -1,23 +1,13 @@
 <?php
 
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-function sube_imagen($FILES)
+function sube_imagen($FILES, $actual = '')
 {
-    $img = new Upload($FILES["image_new"]);
-    $image = null;
-    if ($img->uploaded !== false) {
-        $img->Process("../uploads/");
-        if ($img->processed) {
-            $image = $img->file_dst_name;
-        } else {
-            echo 'Error cargando imagen';
-            $image = null;
-        }
+    try {
+        return ImageUploader::save($FILES["image_new"], dirname(__DIR__, 4) . DIRECTORY_SEPARATOR . 'uploads');
+    } catch (RuntimeException $e) {
+        echo "<script>alert(" . json_encode('Error con la imagen: ' . $e->getMessage()) . ");</script>";
+        return $actual;
     }
-    return $image;
 }
 
 
@@ -50,8 +40,10 @@ if (isset($_GET["opt"]) && $_GET["opt"] == "add") {
     $user->content_es = $_POST["content_es"];
     $user->content_de = $_POST["content_de"];
     $user->destination = $_POST["destination"];
-    $user->image = (isset($_FILES["image_new"]) && ($_FILES["image_new"]['name'] != '')) ? sube_imagen($_FILES) : $_POST["image"];
+    $user->image = (isset($_FILES["image_new"]) && ($_FILES["image_new"]['name'] != '')) ? sube_imagen($_FILES, $_POST["image"]) : $_POST["image"];
     $user->category_id = $_POST["category_id"];
+    $user->publish_at = $_POST["publish_at"] ?? '';
+    $user->expires_at = $_POST["expires_at"] ?? '';
     $user->add();
 
     Core::redir("./?view=posts");
@@ -67,8 +59,10 @@ if (isset($_GET["opt"]) && $_GET["opt"] == "add") {
     $user->content_es = $_POST["content_es"];
     $user->content_de = $_POST["content_de"];
     $user->destination = $_POST["destination"];
-    $user->image = (isset($_FILES["image_new"]) && ($_FILES["image_new"]['name'] != '')) ? sube_imagen($_FILES) : $_POST["image"];
+    $user->image = (isset($_FILES["image_new"]) && ($_FILES["image_new"]['name'] != '')) ? sube_imagen($_FILES, $_POST["image"]) : $_POST["image"];
     $user->category_id = $_POST["category_id"];
+    $user->publish_at = $_POST["publish_at"] ?? '';
+    $user->expires_at = $_POST["expires_at"] ?? '';
     $user->status = isset($_POST["status"]) ? 1 : 0;
     $user->update();
 

@@ -18,7 +18,8 @@ if (isset($_REQUEST['id'])) {
 
     mysqli_select_db($bonaire_atalaya_db, $database_bonaire_atalaya_db);
     $query_tabla = "SELECT *, DATE_FORMAT(created_at, '%d/%m/%Y') AS fecha, category.name AS category FROM post " .
-        "LEFT JOIN category ON post.category_id = category.id WHERE post.id = " . $id . " LIMIT 1;";
+        "LEFT JOIN category ON post.category_id = category.id WHERE post.id = " . $id . " AND post.status = 1 " .
+        "AND (post.publish_at IS NULL OR post.publish_at <= NOW()) AND (post.expires_at IS NULL OR post.expires_at > NOW()) LIMIT 1;";
     $tabla = mysqli_query($bonaire_atalaya_db, $query_tabla);
 
     if ($tabla != false) {

@@ -22,6 +22,8 @@ class PostData
         $this->category_id = "";
         $this->status = "";
         $this->destination = "";
+        $this->publish_at = null;
+        $this->expires_at = null;
         $this->created_at = "NOW()";
     }
 
@@ -30,9 +32,20 @@ class PostData
         return Database::getCon()->real_escape_string((string)$v);
     }
 
+    // Convierte el valor de un <input type="datetime-local"> a SQL ('' => NULL)
+    private static function dt($v)
+    {
+        $v = trim((string)$v);
+        if ($v === '') {
+            return 'NULL';
+        }
+        $t = strtotime(str_replace('T', ' ', $v));
+        return $t ? '"' . date('Y-m-d H:i:s', $t) . '"' : 'NULL';
+    }
+
     public function add()
     {
-        $sql = "insert into " . self::$tablename . " (title,title_es,title_de,brief,brief_es,brief_de,content,content_es,content_de,category_id,destination,image,created_at) ";
+        $sql = "insert into " . self::$tablename . " (title,title_es,title_de,brief,brief_es,brief_de,content,content_es,content_de,category_id,destination,image,publish_at,expires_at,created_at) ";
         $sql .= 'value ("'
             . self::esc($this->title)
             . '","' . self::esc($this->title_es)
@@ -77,7 +90,9 @@ class PostData
             "image=\"" . self::esc($this->image) . "\"," .
             "category_id=" . (int)$this->category_id . "," .
             "status=$this->status," .
-            "destination=" . (int)$this->destination . " " .
+            "destination=" . (int)$this->destination . "," .
+            "publish_at=" . self::dt($this->publish_at) . "," .
+            "expires_at=" . self::dt($this->expires_at) . " " .
             "where id=" . (int)$this->id;
         return Executor::doit($sql);
     }
